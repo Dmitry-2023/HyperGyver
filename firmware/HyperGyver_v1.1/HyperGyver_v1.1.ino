@@ -1,4 +1,37 @@
-/*
+интервал  getSoundLength () {
+  интервал thisMax = 0 ;
+  интервал этот сигнал = 0 ;
+  для ( int я = 0 ; я < 300 ; я ++) {
+    этот сигнал = аналоговое чтение (ADC_PIN);
+    если (этот сигнал > этот макс) этот макс = этот сигнал;
+  }
+
+  статический  float filMax = 1000 , filMin = 1000 ;
+  статическая  плавающая длина filLength;
+  статический  интервал maxMax = 0 , minMin = 1023 ;
+  статический счетчик байтов;
+
+  счетчик++;
+  если (счетчик == 50 ) {
+    счетчик = 0 ;
+    максМакс = 0 ;
+    минМин = 1023 ;
+  }
+  если (thisMax > maxMax) maxMax = thisMax;
+  если (thisMax < minMin) minMin = thisMax;
+
+  filMax += ( float )(maxMax - filMax) * 0,01 ;
+  filMin += ( float )(minMin - filMin) * 0,01 ;
+
+  int thisLenght = карта (thisMax - filMin, VOL_THR, filMax - filMin, 0 , 100 );
+  thisLenght = ограничение (thisLenght, 0 , 100 );
+
+  filLength += ( float )(thisLenght - filLength) * 0,2 ;
+  если (thisMax > filMax) filLength = 100 ;
+  
+  если (filMax - filMin > VOL_THR) вернуть filLength;
+  иначе  вернуть  0 ;
+}/*
   Скетч к проекту "Гиперкуб"
   Страница проекта (схемы, описания): https://alexgyver.ru/hypergyver/
   Исходники на GitHub: https://github.com/AlexGyver/hypergyver/
@@ -10,7 +43,7 @@
 // Версия 1.1: исправлен случайный глюк. Виноваты random функции из либы FastLED!!!
 
 // ===== НАСТРОЙКИ =====
-#define EDGE_LEDS 11    // кол-во диодов на ребре куба
+#define EDGE_LEDS 12    // кол-во диодов на ребре куба
 #define LED_DI 2        // пин подключения
 #define BRIGHT 255      // яркость
 #define CHANGE_PRD 10   // смена режима, секунд
